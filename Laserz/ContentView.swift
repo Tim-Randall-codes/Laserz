@@ -26,6 +26,12 @@ class GameScene: SKScene {
         backgroundColor = SKColor.black
         player.position = CGPoint(x: size.width * 0.5, y: 0)
         addChild(player)
+        // runs the addStar function at regular interval
+        run(SKAction.repeatForever(
+              SKAction.sequence([
+                SKAction.run(addStar),
+                SKAction.wait(forDuration: 0.2)
+                ])))
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         // makes sure that if there are multiple touches, any but the first one will end this function
@@ -44,5 +50,17 @@ class GameScene: SKScene {
         let actionMove = SKAction.move(to: placeToThrow, duration: 1.0)
         let actionMoveDone = SKAction.removeFromParent()
         laser.run(SKAction.sequence([actionMove, actionMoveDone]))
+    }
+    func addStar(){
+        //creates star at the random point on the x axis.
+        let star = SKShapeNode(circleOfRadius: 1)
+        star.fillColor = .white
+        let randomX = Int.random(in: 1..<301)
+        star.position = CGPoint(x: randomX, y: 844)
+        addChild(star)
+        // moves the stars down the screen so it looks like you are moving
+        let actionMove = SKAction.move(to: CGPoint(x: star.position.x, y: 0), duration: TimeInterval(7.0))
+        let actionMoveDone = SKAction.removeFromParent()
+        star.run(SKAction.sequence([actionMove, actionMoveDone]))
     }
 }
